@@ -1,0 +1,35 @@
+.nav-bar{
+  border-bottom: 1px solid black;
+  box-shadow: 0 0 2px 0;
+
+  & nav{
+    display: flex;
+    flex-direction: row;
+    height: 70px;
+    background-color: white;
+
+    & h3{
+      margin: 0.6% 0 0 8%;
+      color: black;
+    }
+
+    .nav-bar-user-button{
+        width: 70%;
+        display: flex;
+        flex-direction: row-reverse;
+
+        & #sign-up {
+          background-color: black;
+          color: white;
+          margin: 0 0 0 50%;
+        }
+
+        .waves-effect.waves-teal.btn-flat{
+            height: 45%;
+            width: 100%;
+            font-size: medium;
+            border-radius: 10px;
+        }
+    }
+  }
+}
