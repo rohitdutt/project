@@ -1,11 +1,11 @@
 import React , {useState , useEffect} from "react";
-import Socket, {io} from "socket.io-client";
+import Socket from "socket.io-client";
 import "./ChatBox.scss";
 
 const ChatBox = ({user}) => {
     let socket;
 
-    const [port , setPort] = useState("http://localhost:4000/")
+    const [port , setPort] = useState("http://localhost:3000/")
     const [messageToSend,setMessageToSend] = useState("");
 
     useEffect(()=>{
@@ -35,7 +35,7 @@ const ChatBox = ({user}) => {
                                 <textarea id="textarea1" className="materialize-textarea" onChange={(e)=>{
                                         setMessageToSend(e.target.value);
                                         console.log(messageToSend);
-                                        socket.emit('typing', user);
+                                        // socket.emit('typing', user);
                                 }}/>
                                 <label htmlFor="textarea1">Message</label>
                             </div>
