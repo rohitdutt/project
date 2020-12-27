@@ -5,7 +5,7 @@ import "./ChatBox.scss";
 const ChatBox = ({user}) => {
     let socket;
 
-    const [port , setPort] = useState("http://localhost:3000/")
+    const [port , setPort] = useState("http://localhost:4000/")
     const [messageToSend,setMessageToSend] = useState("");
 
     useEffect(()=>{
