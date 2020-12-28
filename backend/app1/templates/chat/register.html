@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <form class="" action="{%url 'index'%}" method="post">{%csrf_token%}
+      <input type="email" name="email"  id="inputEmail" class="form-control" value="" placeholder="Email address" required
+      autofocus>
+
+      <input type="text" name="username"  id="inputUsername" class="form-control" value="" placeholder="Username" >
+
+      <input type="password" name="password1"  id="inputPassword1" class="form-control" value="" placeholder="Password"
+      required>
+
+      <input type="password" name="password2"  id="inputPassword2" class="form-control" value="" placeholder="Confirm password"
+      required>
+      <input type="submit" name="" value="submit" id="room-name-submit">
+    </form>
+      <script type="text/javascript">
+        document.que
+        var email=document.querySelector('#inputEmail').value;
+        var pass1=document.querySelector('#inputPassword1').value;
+        var pass2=document.querySelector('#inputPassword2').value;
+        console.log(pass1);
+        console.log(pass2);
+        console.log(email);
+        if(pass1===pass2){
+        document.querySelector('#room-name-submit').onclick = function(e) {
+    //  var room_name = document.querySelector('#room-name-input').value;
+      var username = document.querySelector('#inputUsername').value;
+      console.log(room_name);
+      window.location.pathname = '/chat/'+username+ '/';
+  }}
+    else{
+  alert("password must be same");
+};
+
+</script>
+  </body>
+</html>

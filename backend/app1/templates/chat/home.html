@@ -1,0 +1,148 @@
+{%extends 'base.html'%}
+{%load static%}
+
+{% block content%}
+<style media="screen">
+
+.container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+/* Darker chat container */
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+/* Clear floats */
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Style images */
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+/* Style the right image */
+.container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+/* Style time text */
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+/* Style time text */
+.time-left {
+  float: left;
+  color: #999;
+}<style>
+ul {
+list-style-type: none;
+margin: 0;
+padding: 0;
+overflow: hidden;
+background-color: #333;
+}
+
+li {
+float: left;
+}
+
+li a {
+display: block;
+color: white;
+text-align: center;
+padding: 14px 16px;
+text-decoration: none;
+}
+
+li a:hover {
+background-color: green;
+}
+.avatar {
+vertical-align: middle;
+width: 50px;
+height: 50px;
+border-radius: 50%;
+}
+
+</style>
+
+<ul>
+<li><a class="active" href="#home">Home</a></li>
+<li><a href="#news">News</a></li>
+<li><a href="#contact">Contact</a></li>
+<li><a href="#about">About</a></li>
+<li><img src="{%static 'myimg/logo.png'%}" alt="Avatar" class="avatar"></li>
+</ul>
+
+
+</style>
+<div class="container">
+  <img src="{%static 'myimg/logo.png'%}" alt="Avatar">
+  <p id="message"></p>
+  <span class="time-right">11:00</span>
+</div>
+<input type="text" name="" id="chat-message-input" value="">
+<input type="submit" name="submit" id="chat-message-submit" value="submit">
+
+<h1>hello!!!!!!!</h1>
+{{ room_name|json_script:"room-name" }}
+{{userName|json_script:"userName"}}
+<script>
+    const cr="myroom";
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    const userName = JSON.parse(document.getElementById('userName').textContent);
+    console.log(userName);
+    console.log(roomName);
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chat/'
+        + cr
+        + '/'
+    );
+    console.log(chatSocket);
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        document.querySelector('#message').value += ('['+data.userName+']'+data.message + '\n');
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'userName':userName
+        }));
+        messageInputDom.value = '';
+    };
+</script>
+{% endblock content %}

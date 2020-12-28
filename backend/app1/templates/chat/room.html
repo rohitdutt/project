@@ -1,0 +1,143 @@
+<!-- chat/templates/chat/room.html -->
+{%extends 'base.html'%}
+{%load static%}
+{%block content%}
+<style>
+ul {
+list-style-type: none;
+margin: 0;
+padding: 0;
+overflow: hidden;
+background-color: #333;
+}
+
+li {
+float: left;
+}
+.pic{
+  float:right;
+}
+
+li a {
+display: block;
+color: white;
+text-align: center;
+padding: 14px 16px;
+text-decoration: none;
+}
+
+li a:hover {
+background-color: green;
+}
+.avatar {
+vertical-align: middle;
+width: 50px;
+height: 50px;
+border-radius: 50%;
+}
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+  border-color:solid  20px blue;
+  height:60%;
+}
+
+</style>
+
+<ul>
+<li><a class="active" href="#home">Home</a></li>
+<li><a href="#news">News</a></li>
+<li><a href="#contact">Contact</a></li>
+<li><a href="#about">About</a></li>
+<li class="pic"><img src="{%static 'myimg/logo.png'%}" alt="Avatar" class="avatar"></li>
+</ul>
+<div class="container" id="temp">
+<div class="" id="chat-log">
+<br/  >
+</div>
+</div><!--
+
+  <img src="{%static 'myimg/logo.png'%}" alt="Avatar" id="pic">
+  <p id="message">             </p>
+  <span class="time-right" id="time"></span>
+</div>
+    <textarea id="chat-log" cols="100" rows="20" readonly></textarea><br>
+  -->
+    <input id="chat-message-input" type="text" size="100" style="margin-bottom:10px;width:100%;" ><br>
+    <input id="chat-message-submit" type="button" value="Send">
+    {{room_name|json_script:"room-name" }}
+    {{userName|json_script:"userName"}}
+    <script>
+    const cr="myroom"
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        const userName = JSON.parse(document.getElementById('userName').textContent);
+        console.log(userName);
+        console.log(roomName);
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + cr
+            + '/'
+        );
+        console.log(chatSocket);
+        chatSocket.onopen=function(e){
+          alert("[open] Connection established");
+        }
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            console.log(data.message);
+            var a=document.getElementById("chat-log");
+
+            var b=document.createElement("p")
+            b.id='message';
+            b.class='container'
+            b.innerHTML+="dddddddddddddddddddddd<br>" ;
+            var no = document.createTextNode('\n'+data.userName+'-');
+            var node = document.createTextNode(data.message);
+            var br = document.createElement('BR');
+              b.appendChild(no);
+              b.appendChild(node);
+      //      a.appendChild(br);
+console.log(userName==data.userName);
+            if(userName===data.userName){
+              b.style.color="red";
+              b.style.cssFloat="right";
+              b.innerHTML+="<br>"
+              a.appendChild(b);
+
+
+            }
+            else{
+              a.appendChild(b);
+
+            }
+
+            //document.querySelector('#chat-log').value += ('['+data.userName+']-'+data.message + '\n');
+            };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'userName':userName
+            }));
+            messageInputDom.value = '';
+        };
+    </script>
+    {%endblock content%}
