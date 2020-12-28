@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import User,Message
 from django.contrib.auth.admin import UserAdmin
+#
+#
 
 class User_Admin(UserAdmin):
     list_display=('email','username','date_joined','last_login','is_admin','is_staff')
